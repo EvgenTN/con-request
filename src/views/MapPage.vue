@@ -1,24 +1,26 @@
 <template>
   <div class="map-page">
     <h1>This is a map page</h1>
-    <MapComponent></MapComponent>
+    <MapComponent ></MapComponent>
   </div>
 </template>
 
 <script>
-import MapComponent from '@/components/MapComponent'
+import MapComponent from "@/components/MapComponent";
 
 export default {
-  name: 'map-page',
+  name: "map-page",
   components: {
     MapComponent
   },
+  created() {
+    
+  },
   mounted() {
-    this.$store.dispatch('fethcLocations')
+    this.$store.dispatch("fethcLocations");
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
-
 </style>
