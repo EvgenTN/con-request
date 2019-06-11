@@ -50,10 +50,10 @@ export default {
         map.addLayer(mapLayer);
         L.marker([crd.latitude, crd.longitude]).addTo(map);
         // console.log('latlng', map.)
-        map.on('click', function(e) {
+        map.on('click', (e) => {
           console.log('e', e)
           console.log('getaddress', this)
-          // this.getAddress('getAddress', e.latlng)
+          this.getAddress(e.latlng)
         })
         // this.posit = crd
         // return crd

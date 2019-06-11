@@ -8,7 +8,8 @@ export default new Vuex.Store({
   state: {
     mapInstance: null,
     locations: [],
-    fetchingLocations: null
+    fetchingLocations: null,
+    selectedAddress: {}
   },
   getters: {
     mapInstance: state => state.mapInstance,
@@ -23,6 +24,10 @@ export default new Vuex.Store({
     },
     setLocations(state, locations) {
       state.locations = locations
+    },
+    setSelectedAddress(state, address) {
+      state.selectedAddress = address
+      console.log('address', state.selectedAddress)
     }
   },
   actions: {
@@ -42,9 +47,13 @@ export default new Vuex.Store({
       commit('setFetchingLocations', promise)
       return promise
     },
-    getAddress(context, payload) {
+    getAddress({ commit }, payload) {
       fetch(`https://nominatim.openstreetmap.org/reverse?format=geojson&lat=${payload.lat}&lon=${payload.lng}`)
-        .then(resp => console.log(resp))
+        .then(resp => resp.json())
+        .then(data => {
+          console.log('data', data)
+          commit('setSelectedAddress', data.features[0].properties.address)
+        })
     }
   }
 })
