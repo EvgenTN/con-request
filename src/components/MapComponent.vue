@@ -6,7 +6,7 @@
 
 <script>
 import L from "leaflet";
-import { mapGetters, mapMutations } from "vuex";
+import { mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
   name: "map-component",
@@ -20,6 +20,7 @@ export default {
   },
   methods: {
     ...mapMutations(["setMapInstance"]),
+    ...mapActions(['getAddress']),
     getPosition() {
       var options = {
         enableHighAccuracy: true,
@@ -47,11 +48,12 @@ export default {
           }
         );
         map.addLayer(mapLayer);
-        L.marker([47.8342018, 35.1099049]).addTo(map);
+        L.marker([crd.latitude, crd.longitude]).addTo(map);
         // console.log('latlng', map.)
         map.on('click', function(e) {
           console.log('e', e)
-          this.$store.dispatch('getAddress', e.latlng)
+          console.log('getaddress', this)
+          // this.getAddress('getAddress', e.latlng)
         })
         // this.posit = crd
         // return crd
@@ -61,7 +63,7 @@ export default {
         console.warn(`ERROR(${err.code}): ${err.message}`);
       }
       // console.log('nav', navigator.geolocation.getCurrentPosition(pos => pos.coords))
-      navigator.geolocation.getCurrentPosition(success, error);
+      navigator.geolocation.getCurrentPosition(success, error, options);
       // console.log('posit', this.posit)
     },
     // getCurrentPosition() {
