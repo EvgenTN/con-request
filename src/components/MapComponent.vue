@@ -1,10 +1,10 @@
 <template>
-  <div ref="mapContainer" class="map-wrap"></div>
+  <div ref="mapContainer" class="map-wrap" @click="getPos" ></div>
 </template>
 
 <script>
 import L from "leaflet";
-import { mapGetters, mapMutations } from "vuex";
+import { mapGetters, mapMutations, mapActions } from "vuex";
 
 export default {
   name: "map-component",
@@ -18,6 +18,7 @@ export default {
   },
   methods: {
     ...mapMutations(["setMapInstance"]),
+    ...mapActions(['getAddress']),
     createMapInstance() {
       const map = L.map(this.$refs.mapContainer, {
         preferCanvas: true
@@ -40,17 +41,19 @@ export default {
     removeMarkers() {
       if (this.mapInstance) {
         for (const marker of this.markers) {
-          this.mapInstance.removeLayer(marker)
+          this.mapInstance.removeLayer(marker);
         }
       }
     },
     addMarkers() {
       if (this.mapInstance) {
+        console.log("mapIns", this.mapInstance);
         for (const loc of this.locations) {
           if (loc.lan && loc.lon) {
             const marker = L.marker(new L.LatLng(loc.lan, loc.lon), {
               title: loc.title
             });
+            this.mapInstance.marker(marker);
             this.mapInstance.addLayer(marker);
             this.markers.push(marker);
           }
@@ -59,19 +62,27 @@ export default {
     },
     fitAllMarkers() {
       if (this.mapInstance && this.markers.length) {
-        const group = L.featureGroup(this.markers)
-        this.mapInstance.fitBounds(group.getBounds())
+        const group = L.featureGroup(this.markers);
+        this.mapInstance.fitBounds(group.getBounds());
       }
+    },
+    getPos() {
+      this.mapInstance.on('click', e => {
+          console.log('e', e)
+          // console.log('getaddress', this)
+          // this.$store.dispatch('getAddress', e.latlng)
+          this.getAddress(e.latlng)
+        })
     }
   },
-  watch: {
-    locations(inTo, inFrom) {
-      console.log(inTo, inFrom);
-      this.removeMarkers();
-      this.addMarkers();
-      this.fitAllMarkers();
-    }
-  },
+  // watch: {
+  //   locations(inTo, inFrom) {
+  //     console.log(inTo, inFrom);
+  //     this.removeMarkers();
+  //     this.addMarkers();
+  //     this.fitAllMarkers();
+  //   }
+  // },
   mounted() {
     this.renderMap();
   },

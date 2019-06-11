@@ -41,6 +41,10 @@ export default new Vuex.Store({
       })
       commit('setFetchingLocations', promise)
       return promise
+    },
+    getAddress(context, payload) {
+      fetch(`https://nominatim.openstreetmap.org/reverse?format=geojson&lat=${payload.lat}&lon=${payload.lng}`)
+        .then(resp => console.log('resp', resp))
     }
   }
 })
