@@ -16,7 +16,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["mapInstance", "locations"])
+    ...mapGetters(["mapInstance"])
   },
   methods: {
     ...mapMutations(["setMapInstance"]),
@@ -34,8 +34,6 @@ export default {
         console.log(`Latitude : ${crd.latitude}`);
         console.log(`Longitude: ${crd.longitude}`);
         // console.log(`More or less ${crd.accuracy} meters.`);
-        // const sss = new Promise(resolve => crd)
-        // console.log('sss', sss);
         const map = L.map(this.$refs.mapContainer, {
           preferCanvas: true
         }).setView([crd.latitude, crd.longitude], 13);
@@ -49,87 +47,37 @@ export default {
         );
         map.addLayer(mapLayer);
         L.marker([crd.latitude, crd.longitude]).addTo(map);
-        // console.log('latlng', map.)
         map.on('click', (e) => {
-          console.log('e', e)
-          console.log('getaddress', this)
+          // console.log('e', e)
+          // console.log('getaddress', this)
           this.getAddress(e.latlng)
         })
-        // this.posit = crd
-        // return crd
       };
 
       function error(err) {
         console.warn(`ERROR(${err.code}): ${err.message}`);
       }
-      // console.log('nav', navigator.geolocation.getCurrentPosition(pos => pos.coords))
       navigator.geolocation.getCurrentPosition(success, error, options);
-      // console.log('posit', this.posit)
     },
-    // getCurrentPosition() {
-    //   const pos = this.getPosition();
-    //   // console.log("if", this.getPosition());
+    // createMapInstance() {
+    //   // console.log('aaaa', this.getCurrentPosition())
+    //   const map = L.map(this.$refs.mapContainer, {
+    //     preferCanvas: true
+    //   }).setView([51.505, -0.09], 13);
 
-    //   if (pos) {
-    //     return [pos.latitude, pos.longitude];
-    //   } else return [51.505, -0.09];
+    //   const mapLayer = L.tileLayer(
+    //     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    //     {
+    //       attribution:
+    //         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    //     }
+    //   );
+    //   map.addLayer(mapLayer);
+    //   return map;
     // },
-    createMapInstance() {
-      // console.log('aaaa', this.getCurrentPosition())
-      const map = L.map(this.$refs.mapContainer, {
-        preferCanvas: true
-      }).setView([51.505, -0.09], 13);
-
-      const mapLayer = L.tileLayer(
-        "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        {
-          attribution:
-            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }
-      );
-      map.addLayer(mapLayer);
-      return map;
-    },
     renderMap() {
-      console.log("renderMap", L);
+      // console.log("renderMap", L);
       this.setMapInstance(this.getPosition());
-    },
-    removeMarkers() {
-      if (this.mapInstance) {
-        for (const marker of this.markers) {
-          this.mapInstance.removeLayer(marker);
-        }
-      }
-    },
-    addMarkers() {
-      if (this.mapInstance) {
-        for (const loc of this.locations) {
-          if (loc.lan && loc.lon) {
-            const marker = L.marker(new L.LatLng(loc.lan, loc.lon), {
-              title: loc.title
-            });
-            this.mapInstance.addLayer(marker);
-            this.markers.push(marker);
-          }
-        }
-      }
-    },
-    fitAllMarkers() {
-      if (this.mapInstance && this.markers.length) {
-        const group = L.featureGroup(this.markers);
-        this.mapInstance.fitBounds(group.getBounds());
-      }
-    },
-    // addMark() {
-    //   L.marker([47.8342018, 35.1099049]).addTo(map);
-    // }
-  },
-  watch: {
-    locations(inTo, inFrom) {
-      console.log(inTo, inFrom);
-      this.removeMarkers();
-      this.addMarkers();
-      this.fitAllMarkers();
     }
   },
   mounted() {

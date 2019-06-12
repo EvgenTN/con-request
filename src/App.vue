@@ -1,12 +1,22 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/map">Map</router-link>
-    </div>
+    <Header></Header>
     <router-view/>
   </div>
 </template>
+
+<script>
+import Header from '@/components/Header'
+
+// TODO: Fix bug with map view if user banned to check his location
+
+export default {
+  components: {
+    Header
+  }
+}
+</script>
+
 
 <style lang="scss">
 #app {
@@ -17,7 +27,7 @@
   color: #2c3e50;
 }
 #nav {
-  padding: 30px;
+  padding: 10px;
   a {
     font-weight: bold;
     color: #2c3e50;
