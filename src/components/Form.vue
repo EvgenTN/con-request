@@ -1,12 +1,19 @@
 <template>
-  <div>
-    <p>Hello from form</p>
-  </div>
+ <form>
+   <div>
+     <span>Адрес</span>
+     <input type="text" />
+   </div>
+   <button>Отправить заявку</button>
+ </form>
 </template>
 
 <script>
-export default {};
+export default {
+
+};
 </script>
 
 <style lang="scss" scoped>
+
 </style>

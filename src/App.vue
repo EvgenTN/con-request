@@ -2,17 +2,20 @@
   <div id="app">
     <Header></Header>
     <router-view/>
+    <Footer></Footer>
   </div>
 </template>
 
 <script>
 import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 
 // TODO: Fix bug with map view if user banned to check his location
 
 export default {
   components: {
-    Header
+    Header,
+    Footer
   }
 }
 </script>
