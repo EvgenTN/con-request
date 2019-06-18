@@ -6,9 +6,11 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     mapInstance: null,
+    selectedAddress: null
   },
   getters: {
     mapInstance: state => state.mapInstance,
+    selectedAddress: state => state.selectedAddress
   },
   mutations: {
     setMapInstance(state, mapInstance) {
@@ -20,7 +22,7 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    getAddress({ commit }, payload) {
+    async getAddress({ commit }, payload) {
       fetch(`https://nominatim.openstreetmap.org/reverse?format=geojson&lat=${payload.lat}&lon=${payload.lng}`)
         .then(resp => resp.json())
         .then(data => {

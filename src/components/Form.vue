@@ -2,16 +2,23 @@
   <form class="form" @submit.prevent="sendData">
     <div class="form-div" v-for="(item, i) in formRender" :key="i">
       <span class="form-span">{{ item.name }}</span>
-      <component :is="item.type" :model="item.model" :inputType="item.inputType" :selectOptions="item.selectOptions" @changeval="changeValue($event)"></component>
+      <component
+        :is="item.type"
+        :model="item.model"
+        :inputType="item.inputType"
+        :selectOptions="item.selectOptions"
+        @changeval="changeValue($event, item.keyName)"
+      ></component>
     </div>
     <button type="submit" class="btn">Отправить заявку</button>
   </form>
 </template>
 
 <script>
-import InputElement from '@/components/InputElement'
-import SelectElement from '@/components/SelectElement'
-import TextareaElement from '@/components/TextareaElement'
+import InputElement from "@/components/InputElement";
+import SelectElement from "@/components/SelectElement";
+import TextareaElement from "@/components/TextareaElement";
+import { mapGetters } from "vuex";
 
 export default {
   name: "user_form",
@@ -20,73 +27,94 @@ export default {
     SelectElement,
     TextareaElement
   },
-  data() {
-    return {
-      address: "",
-      flat: "",
-      userName: "",
-      connectionDate: null,
-      tel: null,
-      currentProvider: null,
-      floor: null,
-      portNum: null,
-      comment: ""
-    };
-  },
   computed: {
+    ...mapGetters({
+      selectedAddress: "selectedAddress"
+    }),
+    rightAddress() {
+      let addr
+      if (this.selectedAddress) {
+        addr = [
+          this.selectedAddress.city,
+          this.selectedAddress.road,
+          this.selectedAddress.house_number
+        ];
+      }
+      return addr
+    },
+    formControls() { return {
+        address: this.rightAddress,
+        flat: "",
+        userName: "",
+        connectionDate: null,
+        tel: null,
+        currentProvider: null,
+        floor: null,
+        portNum: null,
+        comment: ""
+      }},
     formRender() {
       return [
         {
           name: "Адрес:",
-          model: this.address,
+          model: this.formControls.address,
+          keyName: "address",
           type: InputElement,
           inputType: "text"
         },
         {
           name: "Квартира:",
-          model: this.flat,
+          model: this.formControls.flat,
+          keyName: "flat",
           type: InputElement,
           inputType: "number"
         },
         {
           name: "Ваше ФИО:",
-          model: this.userName,
+          model: this.formControls.userName,
+          keyName: "userName",
           type: InputElement,
           inputType: "text"
         },
         {
           name: "Желаемая дата и время подключения:",
-          model: this.connectionDate,
+          model: this.formControls.connectionDate,
+          keyName: "connectionDate",
           type: InputElement,
           inputType: "datetime"
         },
         {
           name: "Телефон:",
-          model: this.tel,
+          model: this.formControls.tel,
+          keyName: "tel",
           type: InputElement,
           inputType: "tel"
         },
         {
           name: "Ваш текущий провайдер:",
-          model: this.currentProvider,
+          model: this.formControls.currentProvider,
+          keyName: "currentProvider",
           type: SelectElement,
-          selectOptions: ['first', 'second']
+          selectOptions: ["first", "second"]
         },
         {
           name: "Этаж:",
-          model: this.floor,
+          model: this.formControls.floor,
+          keyName: "floor",
           type: InputElement,
           inputType: "number"
         },
         {
           name: "Номер порта:",
-          model: this.portNum,
+          model: this.formControls.portNum,
+          keyName: "portNum",
           type: InputElement,
           inputType: "number"
         },
         {
           name: "Примечание:",
-          model: this.comment,
+          model: this.formControls.comment,
+          keyName: "comment",
           type: TextareaElement
         }
       ];
@@ -94,10 +122,12 @@ export default {
   },
   methods: {
     sendData() {
-      console.log('address', this.address)
+      console.log("address", this.formControls);
     },
-    changeValue(e) {
-      this.address = e.target.value
+    changeValue(e, key) {
+      this.formControls[key] = e.target.value;
+      // console.log('address', this.address);
+      // console.log('item', Object.keys(this.$data))
     }
   }
 };

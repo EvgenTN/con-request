@@ -51,6 +51,7 @@ export default {
           // console.log('e', e)
           // console.log('getaddress', this)
           this.getAddress(e.latlng)
+            .then(() => this.$router.push('/form'))
         })
       };
 

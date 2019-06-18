@@ -1,10 +1,10 @@
 <template>
-  <textarea class="form-input" v-model="model"></textarea>
+  <textarea class="form-input" :value="model" @input="$emit('changeval', $event)"></textarea>
 </template>
 
 <script>
 export default {
-  name: 'input-element',
+  name: 'textarea-element',
     props: ['model']  
   // props: {
   //   model
